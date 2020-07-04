@@ -83,6 +83,7 @@ func RunHTTPTest(o *HTTPRunnerOptions) (*HTTPRunnerResults, error) {
 	r := periodic.NewPeriodicRunner(&o.RunnerOptions)
 	defer r.Options().Abort()
 	numThreads := r.Options().NumThreads
+	o.NumConnections = numThreads
 	o.HTTPOptions.Init(o.URL)
 	out := r.Options().Out // Important as the default value is set from nil to stdout inside NewPeriodicRunner
 	total := HTTPRunnerResults{

@@ -1,3 +1,15 @@
+fortio (1.4.2-1) unstable; urgency=medium
+
+  * Use go1.11 connection pooling/reuse of client
+
+ -- Laurent Demailly <ldemailly@gmail.com>  Fri Jun 19 15:31:12 PDT 2020
+
+fortio (1.4.1-1) unstable; urgency=medium
+
+  * Rebuild
+
+ -- Laurent Demailly <ldemailly@gmail.com>  Fri Jun 19 15:31:12 PDT 2020
+
 fortio (1.4.0-1) unstable; urgency=medium
 
   * Switch to go modules and go 1.14 and newest grpc

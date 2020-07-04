@@ -71,7 +71,6 @@ func (h *HTTPOptions) Init(url string) *HTTPOptions {
 	}
 	h.initDone = true
 	h.URL = url
-	h.NumConnections = 1
 	if h.HTTPReqTimeOut == 0 {
 		log.Debugf("Request timeout not set, using default %v", HTTPReqTimeOutDefaultValue)
 		h.HTTPReqTimeOut = HTTPReqTimeOutDefaultValue
@@ -178,6 +177,8 @@ type HTTPOptions struct {
 	Payload         []byte // body for http request, implies POST if not empty.
 
 	UnixDomainSocket string // Path of unix domain socket to use instead of host:port from URL
+
+	Transport *http.Transport // Shared transport when using stdClient
 }
 
 // ResetHeaders resets all the headers, including the User-Agent: one (and the Host: logical special header).
@@ -371,22 +372,29 @@ func NewStdClient(o *HTTPOptions) *Client {
 	if req == nil {
 		return nil
 	}
-	tr := http.Transport{
-		MaxIdleConns:        o.NumConnections,
-		MaxIdleConnsPerHost: o.NumConnections,
-		DisableCompression:  !o.Compression,
-		DisableKeepAlives:   o.DisableKeepAlive,
-		Proxy:               http.ProxyFromEnvironment,
-		DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
-			// redirect all connections to resolved ip, and use cn as sni host
-			if o.Resolve != "" {
-				addr = o.Resolve + addr[strings.LastIndex(addr, ":"):]
-			}
-			return (&net.Dialer{
-				Timeout: o.HTTPReqTimeOut,
-			}).DialContext(ctx, network, addr)
-		},
-		TLSHandshakeTimeout: o.HTTPReqTimeOut,
+	var tr *http.Transport
+	if o.Transport != nil {
+		tr = o.Transport
+	} else {
+		tr = &http.Transport{
+			MaxIdleConns:        o.NumConnections,
+			MaxIdleConnsPerHost: o.NumConnections,
+			MaxConnsPerHost:     o.NumConnections,
+			DisableCompression:  !o.Compression,
+			DisableKeepAlives:   o.DisableKeepAlive,
+			Proxy:               http.ProxyFromEnvironment,
+			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+				// redirect all connections to resolved ip, and use cn as sni host
+				if o.Resolve != "" {
+					addr = o.Resolve + addr[strings.LastIndex(addr, ":"):]
+				}
+				return (&net.Dialer{
+					Timeout: o.HTTPReqTimeOut,
+				}).DialContext(ctx, network, addr)
+			},
+			TLSHandshakeTimeout: o.HTTPReqTimeOut,
+		}
+		o.Transport = tr
 	}
 	if o.Insecure && o.https {
 		log.LogVf("using insecure https")
@@ -397,9 +405,9 @@ func NewStdClient(o *HTTPOptions) *Client {
 		req: req,
 		client: &http.Client{
 			Timeout:   o.HTTPReqTimeOut,
-			Transport: &tr,
+			Transport: tr,
 		},
-		transport: &tr,
+		transport: tr,
 	}
 	if !o.FollowRedirects {
 		// Lets us see the raw response instead of auto following redirects.
