@@ -58,7 +58,7 @@ func TestNormalizePort(t *testing.T) {
 	for _, tc := range tests {
 		port := fnet.NormalizePort(tc.input)
 		if port != tc.output {
-			t.Errorf("Test case %s failed to normailze port %s\n\texpected: %s\n\t  actual: %s",
+			t.Errorf("Test case %s failed to normalize port %s\n\texpected: %s\n\t  actual: %s",
 				tc.name,
 				tc.input,
 				tc.output,
@@ -301,7 +301,7 @@ func TestNetCatErrors(t *testing.T) {
 
 func TestSetSocketBuffersError(t *testing.T) {
 	c := &net.UnixConn{}
-	fnet.SetSocketBuffers(c, 512, 256) // triggers 22:11:14 V network.go:245> Not setting socket options on non tcp socket <nil>
+	fnet.SetSocketBuffers(c, 512, 256) // triggers 22:11:14 V network.go:245> Not setting socket options on non-TCP socket <nil>
 	t.Logf("SetSocketBuffers on non tcp socket %v", c)
 }
 
@@ -458,7 +458,7 @@ func TestResolveBW(t *testing.T) {
 	}
 	addr, err = fnet.ResolveDestination(ctx, "8.8.4.4:domain")
 	if err != nil {
-		t.Errorf("should hav enot  errored out but got %v", err)
+		t.Errorf("should have not errored out but got %v", err)
 	}
 	if addr.String() != expecting {
 		t.Errorf("expecting %q got %q", expecting, addr.String())

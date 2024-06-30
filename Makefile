@@ -7,7 +7,7 @@
 IMAGES=echosrv fcurl # plus the combo image / Dockerfile without ext.
 
 DOCKER_PREFIX := docker.io/fortio/fortio
-BUILD_IMAGE_TAG := v71@sha256:bc92fd7448b68ad363720250d128a7586a6e2cfccd42fe84809e5c47618b4c36
+BUILD_IMAGE_TAG := v72@sha256:3c90bb3024e44aba4e343364f4e29c07b889c9a5ea32de71869703411495fb85
 BUILDX_PLATFORMS := linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
 BUILDX_POSTFIX :=
 ifeq '$(shell echo $(BUILDX_PLATFORMS) | awk -F "," "{print NF-1}")' '0'
@@ -80,7 +80,7 @@ shell:
 	docker run -ti -v $(CURDIR):/build/fortio $(BUILD_IMAGE)
 
 # This really also tests the release process and build on windows,mac,linux
-# and the docker images, not just "web" (ui) stuff that it also exercises.
+# and the Docker images, not just "web" (UI) stuff that it also exercises.
 release-test: docker-version
 	./Webtest.sh
 
@@ -206,8 +206,8 @@ official-build-version: official-build
 official-build-clean:
 	-$(RM) $(OFFICIAL_BIN) release/Makefile
 
-# Create a complete source tree with naming matching debian package conventions
-TAR ?= tar # on macos need gtar to get --owner
+# Create a complete source tree with naming matching Debian package conventions
+TAR ?= tar # on macOS need gtar to get --owner
 DIST_PATH:=release/fortio_$(DIST_VERSION).orig.tar
 
 .PHONY: dist dist-sign distclean
