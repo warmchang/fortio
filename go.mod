@@ -8,9 +8,9 @@ go 1.19
 
 require (
 	fortio.org/assert v1.2.1
-	fortio.org/cli v1.5.2
+	fortio.org/cli v1.7.0
 	fortio.org/dflag v1.7.1
-	fortio.org/log v1.12.2
+	fortio.org/log v1.14.0
 	fortio.org/scli v1.14.2
 	fortio.org/sets v1.0.4
 	fortio.org/testscript v0.3.1
@@ -32,8 +32,9 @@ require (
 //)
 
 require (
-	fortio.org/struct2env v0.4.0 // indirect
+	fortio.org/struct2env v0.4.1 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	golang.org/x/crypto/x509roots/fallback v0.0.0-20240626151235-a6a393ffd658 // indirect
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
