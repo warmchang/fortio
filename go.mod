@@ -16,7 +16,7 @@ require (
 	fortio.org/log v1.16.0
 	fortio.org/scli v1.15.1
 	fortio.org/sets v1.2.0
-	fortio.org/testscript v0.3.1
+	fortio.org/testscript v0.3.2
 	fortio.org/version v1.0.4
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
